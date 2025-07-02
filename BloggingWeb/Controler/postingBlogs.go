@@ -1,8 +1,6 @@
 package controler
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	config "BloggingWeb/Config"
@@ -13,32 +11,31 @@ import (
 func CreatePost(c *gin.Context) {
 	var post view.Post
 	if err := c.ShouldBindJSON(&post); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		config.GetErrorResponse(c, err)
 		return
 	}
 	database, err := config.ConnectDB()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to access DB"})
+		config.GetErrorResponse(c, err)
 		return
 	}
 	if err := model.CreatePost(database, &post); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create post"})
+		config.GetErrorResponse(c, err)
 		return
 	}
-
-	c.JSON(http.StatusCreated, post)
+	config.GetSuccessResponse(c, post)
 }
 
 func GetPosts(c *gin.Context) {
 	var posts []view.Post
 	database, err := config.ConnectDB()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to access DB"})
+		config.GetErrorResponse(c, err)
 		return
 	}
 	if err := model.GetAllPosts(database, &posts); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch posts"})
+		config.GetErrorResponse(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, posts)
+	config.GetSuccessResponse(c, posts)
 }
