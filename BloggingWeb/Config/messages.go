@@ -12,4 +12,6 @@ var Message = map[string]string{
 	"ErrorWhileUpdatingBlogContent": "Error while updating blog content, Please try again",
 	"ErrorWhileGettingAllUsers":     "Unable to get all users details, Please try again",
 	"ErrorWhileGettingUserById":     "Error while getting user by id, Please try again",
+	"PesatoAuthTokenErrMsg":         "Unable to get Pesato Auth Token, Please try again",
+	"InvalidToken":                  "Pease enter a valid token",
 }
