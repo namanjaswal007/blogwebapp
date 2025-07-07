@@ -29,7 +29,7 @@ func CreateBlog(c *gin.Context) {
 	}
 	// In this step check, number of rows that were matched by the database. And if user is not present then add user into db.
 	if result.RowsAffected == 0 {
-		user := view.User{Name: blog.Name, Email: blog.Email, Id: blog.UserID}
+		user := view.User{FullName: blog.Name, Email: blog.Email, Id: blog.UserID}
 		database.AddUserDetails(&user)
 		blog.UserID = user.Id
 	}

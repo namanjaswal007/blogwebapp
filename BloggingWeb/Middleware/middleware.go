@@ -11,7 +11,7 @@ import (
 	view "BloggingWeb/View"
 )
 
-func CreateToken(data view.RequestData, duration time.Duration) (string, error) {
+func CreateUserSessionToken(data view.UserSessionToken, duration time.Duration) (string, error) {
 	data.Exp = time.Now().Add(duration)
 	return paseto.NewV2().Encrypt([]byte(config.SymmetricKey), data, nil)
 }
@@ -31,12 +31,11 @@ func AuthPasetoMiddleware() gin.HandlerFunc {
 		c.Set("username", payload.Username)
 		c.Set("email", payload.Email)
 		c.Set("role", payload.Role)
-		c.Set("uid", payload.Uid)
 		c.Next()
 	}
 }
 
-func VerifyToken(token string) (payload view.RequestData, err error) {
+func VerifyToken(token string) (payload view.UserSessionToken, err error) {
 	err = paseto.NewV2().Decrypt(token, []byte(config.SymmetricKey), &payload, nil)
 	if err != nil {
 		return

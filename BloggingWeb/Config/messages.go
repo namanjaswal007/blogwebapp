@@ -14,4 +14,10 @@ var Message = map[string]string{
 	"ErrorWhileGettingUserById":     "Error while getting user by id, Please try again",
 	"PesatoAuthTokenErrMsg":         "Unable to get Pesato Auth Token, Please try again",
 	"InvalidToken":                  "Pease enter a valid token",
+	"UserSessionErrMsg":             "Please enter valid email and password, unable to login or register your account",
+	"DecryptionErrMsg":              "Error while decrypting data, Please try again",
+	"UserPasswordWrongMsg":          "Please enter valid user password or email, unable to login",
+	"EncryptionErrMsg":              "Error while encrypting user data , Please try again",
+	"PasetoTokenErrMsg":             "Error while generating Paseto token, Please try again",
+	"SaveSessionErrMsg":             "Error while creating user session , Please try again",
 }

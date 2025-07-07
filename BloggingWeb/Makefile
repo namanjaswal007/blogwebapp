@@ -9,7 +9,7 @@ migration_down:
 	$(MIGRATE) -path $(MIGRATION_DIR) -database "$(DB_URL)" -verbose down
 
 migration_force_zero:
-	$(MIGRATE) -path $(MIGRATION_DIR) -database "$(DB_URL)" force 0
+	$(MIGRATE) -path $(MIGRATION_DIR) -database "$(DB_URL)" force 1
 
 migration_version:
 	$(MIGRATE) -path $(MIGRATION_DIR) -database "$(DB_URL)" version
