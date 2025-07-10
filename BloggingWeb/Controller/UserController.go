@@ -21,7 +21,7 @@ func AddUser(c *gin.Context) {
 		return
 	}
 	defer config.DisconnectDbConnection(database.MainDB)
-	result, err := database.CheckUserByID(user.Id)
+	result, err := database.CheckUserByID(user.ID)
 	if err != nil {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1022" + config.Message["ErrorWhileCheckUser"], Error: err})
 		return

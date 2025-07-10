@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    ID BIGINT PRIMARY KEY,
+    ID BIGSERIAL PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
@@ -7,16 +7,18 @@ CREATE TABLE users (
 );
 
 CREATE TABLE blogs (
-    ID BIGINT PRIMARY KEY NOT NULL,
+    ID BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     user_id BIGINT NOT NULL,
-    name VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE user_sessions (
-    ID BIGINT PRIMARY KEY NOT NULL,
+    ID BIGSERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     token VARCHAR(255) NOT NULL,
     user_agent VARCHAR(255) NOT NULL,
@@ -25,7 +27,7 @@ CREATE TABLE user_sessions (
 );
 
 CREATE TABLE user_credentials (
-    ID BIGSERIAL PRIMARY KEY NOT NULL,
+    ID BIGSERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,

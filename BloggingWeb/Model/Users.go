@@ -17,10 +17,10 @@ func (db Database) GetUserByUid(user interface{}, uid int) (err error) {
 	err = db.MainDB.First(user, uid).Error
 	return
 }
-func (db Database) GetUserByEmail(user interface{}, email string) (err error) {
-	err = db.MainDB.First(user, email).Error
-	return
+func (db Database) GetUserByEmail(user *view.User, email string) error {
+    return db.MainDB.Where("email = ?", email).First(user).Error
 }
+
 func (db Database) AddUserDetails(user *view.User) {
 	db.MainDB.Create(user)
 
@@ -52,7 +52,7 @@ func (db *Database) UpdateSessionTokenAndAgent(userCred view.UserSession) (err e
 		Updates(map[string]interface{}{
 			"token":      userCred.Token,
 			"user_agent": userCred.UserAgent,
-			"updated_at": gorm.Expr("NOW()"),
+			"created_at": gorm.Expr("NOW()"),
 		})
 
 	if result.Error != nil {

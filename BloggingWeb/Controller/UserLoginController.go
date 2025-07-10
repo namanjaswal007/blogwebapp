@@ -7,6 +7,7 @@ import (
 
 	config "BloggingWeb/Config"
 	view "BloggingWeb/View"
+
 )
 
 func UserLogin(c *gin.Context) {
@@ -26,12 +27,12 @@ func UserLogin(c *gin.Context) {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1032" + config.Message["UserSessionErrMsg"], Error: err})
 		return
 	}
-	decryptedPassword, err := config.Decrypt(user.Password)
-	if err != nil {
-		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #10333" + config.Message["DecryptionErrMsg"], Error: err})
-		return
-	}
-	if userCred.Password != decryptedPassword {
+	// decryptedPassword, err := config.Decrypt(user.Password)
+	// if err != nil {
+	// 	config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1033" + config.Message["DecryptionErrMsg"], Error: err})
+	// 	return
+	// }
+	if userCred.Password != user.Password {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1034" + config.Message["UserPasswordWrongMsg"]})
 		return
 	}
@@ -49,7 +50,6 @@ func UserRegister(c *gin.Context) {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1036" + config.Message["ErrorWhileReadingPayloadData"], Error: err})
 		return
 	}
-
 	database, err := config.ConnectDB(config.MainDB)
 	if err != nil {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1037" + config.Message["ErrorWhileConnectingDB"], Error: err})
@@ -67,11 +67,10 @@ func UserRegister(c *gin.Context) {
 	// 	return
 	// }
 	database.SaveUserCredentials(&userCred)
-	fmt.Println(userCred)
+	fmt.Println("user credentials :", userCred)
 	if errDtls := CreateUserSession(c, database, userCred); errDtls.Error != nil {
 		config.GetErrorResponse(c, errDtls)
 		return
 	}
-
 	config.GetSuccessResponse(c, view.SuccessResp{SuccessMsg: "user registered successfully"})
 }

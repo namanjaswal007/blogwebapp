@@ -20,4 +20,5 @@ var Message = map[string]string{
 	"EncryptionErrMsg":              "Error while encrypting user data , Please try again",
 	"PasetoTokenErrMsg":             "Error while generating Paseto token, Please try again",
 	"SaveSessionErrMsg":             "Error while creating user session , Please try again",
+	"GetUserErrMsg":                 "Error while getting user details, Please try again",
 }

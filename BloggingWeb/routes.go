@@ -13,7 +13,6 @@ func PostRoutes(r *gin.Engine) {
 		public.POST("create_post", controller.CreateBlog)
 		public.GET("/get_blogs", controller.GetBlogs)
 		public.GET("/get_blog/:id", controller.GetBlogByID)
-		public.POST("/add_user", controller.AddUser)
 		public.GET("get_user_blogs", controller.GetUserBlogs)
 		public.GET("user_login", controller.UserLogin)
 		public.POST("user_register", controller.UserRegister)
@@ -21,6 +20,7 @@ func PostRoutes(r *gin.Engine) {
 	private := r.Group("/api")
 	{
 		private.Use(middleware.AuthPasetoMiddleware())
+		private.POST("/add_user", controller.AddUser)
 		private.POST("update_blog_content", controller.UpdateBlog)
 		private.GET("get_users", controller.GetAllUsers)
 		private.GET("get_user/:id", controller.GetUserByUid)
