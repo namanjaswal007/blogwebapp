@@ -20,12 +20,19 @@ func AuthPasetoMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 		if token == "" {
-			config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error: #1030 " + config.Message["PesatoAuthTokenErrMsg"]})
+			config.GetErrorResponse(c, view.ErrResp{
+				ErrMsg: "Error: #1030 " + config.Message["PesatoAuthTokenErrMsg"],
+			})
+			c.Abort()
 			return
 		}
 		payload, err := VerifyToken(token)
 		if err != nil {
-			config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error: #1031 " + config.Message["InvalidToken"], Error: err})
+			config.GetErrorResponse(c, view.ErrResp{
+				ErrMsg: "Error: #1031 " + config.Message["InvalidToken"],
+				Error:  err,
+			})
+			c.Abort()
 			return
 		}
 		c.Set("username", payload.Username)

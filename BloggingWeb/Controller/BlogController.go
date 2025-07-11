@@ -23,18 +23,13 @@ func CreateBlog(c *gin.Context) {
 	}
 	// This function is used to disconnect the db connection.
 	defer config.DisconnectDbConnection(database.MainDB)
-	result, err := database.CheckUserByID(blog.UserID)
+	blog.UserID, err = database.CheckUserByID(blog)
 	if err != nil {
-		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1003" + config.Message["ErrorWhileCheckUser"], Error: err})
-	}
-	// In this step check, number of rows that were matched by the database. And if user is not present then add user into db.
-	if result.RowsAffected == 0 {
-		user := view.User{FullName: blog.FullName, FirstName: blog.FirstName, LastName: blog.LastName, Email: blog.Email, ID: blog.UserID, Role: "writer"}
-		database.AddUserDetails(&user)
-		blog.UserID = user.ID
+		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1003 " + config.Message["ErrorWhileCheckUser"], Error: err})
+		return
 	}
 	if err := database.CreatePost(&blog); err != nil {
-		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1004" + config.Message["ErrorWhileUploadingBlog"], Error: err})
+		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1004 " + config.Message["ErrorWhileUploadingBlog"], Error: err})
 		return
 	}
 	config.GetSuccessResponse(c, view.SuccessResp{SuccessMsg: config.Message["BlogUploadedSuccessfully"], Response: blog})

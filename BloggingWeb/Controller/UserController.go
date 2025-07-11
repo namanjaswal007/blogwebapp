@@ -9,7 +9,8 @@ import (
 	view "BloggingWeb/View"
 )
 
-func AddUser(c *gin.Context) {
+func UpdateUser(c *gin.Context) {
+	uid, _ := strconv.Atoi(c.DefaultQuery("uid", ""))
 	var user view.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1020" + config.Message["ErrorWhileReadingPayloadData"], Error: err})
@@ -21,15 +22,12 @@ func AddUser(c *gin.Context) {
 		return
 	}
 	defer config.DisconnectDbConnection(database.MainDB)
-	result, err := database.CheckUserByID(user.ID)
+	err = database.UpdateUserDetails(map[string]interface{}{"date_of_birth": user.DateOfBirth, "user_address": user.UserAddress}, uid)
 	if err != nil {
 		config.GetErrorResponse(c, view.ErrResp{ErrMsg: "Error #1022" + config.Message["ErrorWhileCheckUser"], Error: err})
 		return
 	}
-	if result.RowsAffected == 0 {
-		database.AddUserDetails(&user)
-	}
-	config.GetSuccessResponse(c, view.SuccessResp{SuccessMsg: "Done", Response: user})
+	config.GetSuccessResponse(c, view.SuccessResp{SuccessMsg: "Done"})
 }
 
 func GetAllUsers(c *gin.Context) {

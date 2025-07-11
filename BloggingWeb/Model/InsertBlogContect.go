@@ -11,7 +11,7 @@ type Database struct {
 }
 
 func (db Database) CreatePost(post *view.Blog) error {
-	return db.MainDB.Create(post).Error
+	return db.MainDB.Table("blogs").Create(post).Error
 }
 
 func (db Database) GetAllPosts(posts *[]view.Blog) error {

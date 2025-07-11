@@ -25,6 +25,8 @@ func CreateUserSession(c *gin.Context, db models.Database, userCred view.UserCre
 		Token:     token,
 		CreatedAt: time.Now(),
 		ID:        userCred.ID,
+		Uid:       userCred.Uid,
+		Status:    true,
 	}
 	if errDtls.Error = db.SaveSession(&session); errDtls.Error != nil {
 		errDtls.ErrMsg = "Error #1043: " + config.Message["SaveSessionErrMsg"]
