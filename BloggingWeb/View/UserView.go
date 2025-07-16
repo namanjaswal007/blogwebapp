@@ -5,9 +5,9 @@ import (
 )
 
 type User struct {
-	ID            int    `gorm:"primaryKey"`
+	UserId        int    `json:"user_id"`
 	BlogsUploaded int    `json:"blogs_uploaded"`
-	Email         string `gorm:"unique" json:"email"`
+	Email         string `json:"email"`
 	FullName      string `json:"full_name"`
 	FirstName     string `json:"first_name"`
 	LastName      string `json:"last_name"`
@@ -36,7 +36,7 @@ type UserCredentials struct {
 }
 
 type UserSession struct {
-	ID        int       `gorm:"primaryKey"`
+	SessionId int       `gorm:"primaryKey"`
 	Uid       int       `json:"uid"`
 	Email     string    `json:"email"`
 	Token     string    `json:"token"`

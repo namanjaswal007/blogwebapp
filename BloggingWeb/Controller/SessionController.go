@@ -1,14 +1,15 @@
 package controller
 
 import (
-	"time"
-
-	"github.com/gin-gonic/gin"
-
+	"BloggingWeb/BlogDB"
 	config "BloggingWeb/Config"
 	middleware "BloggingWeb/Middleware"
 	models "BloggingWeb/Model"
 	view "BloggingWeb/View"
+	"context"
+	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func CreateUserSession(c *gin.Context, db models.Database, userCred view.UserCredentials) (errDtls view.ErrResp) {
@@ -18,39 +19,35 @@ func CreateUserSession(c *gin.Context, db models.Database, userCred view.UserCre
 		errDtls.ErrMsg = "Error #1042: " + config.Message["PasetoTokenErrMsg"]
 		return
 	}
-	session := view.UserSession{
+	session := BlogDB.SaveUserSessionParams{
 		Email:     userCred.Email,
 		Role:      userCred.Role,
 		UserAgent: c.GetHeader("user-Agent"),
 		Token:     token,
-		CreatedAt: time.Now(),
-		ID:        userCred.ID,
-		Uid:       userCred.Uid,
-		Status:    true,
+		Uid:       int64(userCred.Uid),
 	}
-	if errDtls.Error = db.SaveSession(&session); errDtls.Error != nil {
+	if errDtls.Error = db.Query.SaveUserSession(context.Background(), session); errDtls.Error != nil {
 		errDtls.ErrMsg = "Error #1043: " + config.Message["SaveSessionErrMsg"]
-		return
 	}
 	return
 }
 
 func UpdateUserSession(c *gin.Context, db models.Database, email string) (errDtls view.ErrResp) {
 	// Get user from DB
-	var user view.User
-	if errDtls.Error = db.GetUserByEmail(&user, email); errDtls.Error != nil {
+	var user BlogDB.User
+	if user, errDtls.Error = db.Query.GetUserByEmail(context.Background(), email); errDtls.Error != nil {
 		errDtls.ErrMsg = "Error #1044: " + config.Message["GetUserErrMsg"]
 		return
 	}
 	// Create new token
-	newToken, err := middleware.CreateUserSessionToken(view.UserSessionToken{Username: user.FullName, Email: user.Email, Role: user.Role}, time.Hour)
+	newToken, err := middleware.CreateUserSessionToken(view.UserSessionToken{Username: user.FullName, Email: user.Email, Role: user.Role.String}, time.Hour)
 	if err != nil {
 		errDtls.ErrMsg = "Error #1045: " + config.Message["PasetoTokenErrMsg"]
 		errDtls.Error = err
 		return
 	}
-	userAgent := c.GetHeader("User-Agent")
-	if errDtls.Error = db.UpdateSessionTokenAndAgent(view.UserSession{UserAgent: userAgent, Token: newToken, Email: email}); errDtls.Error != nil {
+	// userAgent := c.GetHeader("User-Agent")
+	if _, errDtls.Error = db.Query.UpdateSessionTokenAndAgent(context.Background(), BlogDB.UpdateSessionTokenAndAgentParams{Token: newToken, UserAgent: c.GetHeader("User-Agent"), CreatedAt: time.Now(), Status: true, Email: email}); errDtls.Error != nil {
 		errDtls.ErrMsg = "Error #1046: " + config.Message["UpdateSessionErrMsg"]
 	}
 	return

@@ -2,7 +2,7 @@ package view
 
 type ErrResp struct {
 	ErrMsg string
-	Error  error
+	Error  interface{}
 }
 
 type SuccessResp struct {

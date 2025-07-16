@@ -1,14 +1,13 @@
-package middleware
+package middlewares
 
 import (
+	config "BloggingWeb/Config"
+	view "BloggingWeb/View"
 	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/o1egl/paseto"
-
-	config "BloggingWeb/Config"
-	view "BloggingWeb/View"
 )
 
 func CreateUserSessionToken(data view.UserSessionToken, duration time.Duration) (string, error) {

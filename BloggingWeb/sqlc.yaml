@@ -1,0 +1,9 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "Migration/query.sql"
+    schema: "Migration/000001_blog_mainDB_mg.up.sql"
+    gen:
+      go:
+        package: "BlogDB"
+        out: "BlogDB"

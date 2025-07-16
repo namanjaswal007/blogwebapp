@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-
 	controller "BloggingWeb/Controller"
 	middleware "BloggingWeb/Middleware"
+
+	"github.com/gin-gonic/gin"
 )
 
 func PostRoutes(r *gin.Engine) {
